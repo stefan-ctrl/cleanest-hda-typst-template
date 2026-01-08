@@ -13,11 +13,10 @@
 ) = {
   let authors-by-city = authors.map(author => author.city).dedup()
   
-  heading(level: 1, CONFIDENTIALITY_STATEMENT_TITLE.at(language))
-  v(1em)
+  heading(level: 1, numbering: none, outlined: false, CONFIDENTIALITY_STATEMENT_TITLE.at(language))
 
   if (confidentiality-statement-content != none) {
-    confidentiality-statement-content
+    par(confidentiality-statement-content, justify: true)
   } else {
     let authors-by-company = authors.map(author => author.name).dedup()
     let authors-by-study = authors.map(author => author.course-of-studies).dedup()

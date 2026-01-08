@@ -152,29 +152,9 @@
   }
   counter(page).update(1)  
 
-  // ========== INFO PAGE ========================================
-  
   // ---------- Heading Format (Part I) ---------------------------------------
-
   show heading: set text(weight: "bold", font: heading-font)
   show heading.where(level: 1): it => {v(2 * page-grid) + text(size: 2 * page-grid, it)}
-
-  if (show-info-page) {
-    pagebreak()
-    info-page(
-      authors,
-      title,
-      date,
-      date-format,
-      pdf-version,
-      show-confidentiality-statement-at-beginning,
-      confidentiality-statement-content,
-      university,
-      university-location,
-      language,
-      many-authors,
-    )
-  }
 
   // ---------- Page Setup ---------------------------------------
 
@@ -228,6 +208,26 @@
 
   // ========== FRONTMATTER ========================================
   
+  // ---------- INFO PAGE with Confidentiality Statement------------
+  
+  if (show-info-page) {
+    pagebreak()
+    info-page(
+      authors,
+      title,
+      date,
+      date-format,
+      pdf-version,
+      show-confidentiality-statement-at-beginning,
+      confidentiality-statement-content,
+      university,
+      university-location,
+      language,
+      many-authors,
+    )
+  }
+
+
   // ---------- Abstract ---------------------------------------
 
   if (show-abstract and abstract != none) {
