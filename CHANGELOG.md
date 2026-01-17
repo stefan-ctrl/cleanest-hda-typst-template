@@ -6,6 +6,8 @@
 
 ### Features
 - tables of figures/tables: toggle with `show-table-of-figures` and `show-table-of-tables`; optional page breaks via `table-of-figures-page-break` and `table-of-tables-page-break`
+- math equation numbering: added `enable-math-numbering` parameter (default: `false`) to optionally enable automatic numbering of math equations; numbering format can be customized with `math-numbering` parameter
+- custom IEEE CSL: added customized `ieee.csl` citation style that displays full author names instead of abbreviated initials (e.g., "John Smith" instead of "J. Smith"), while maintaining standard IEEE formatting otherwise
 
 ## 0.2.0
 

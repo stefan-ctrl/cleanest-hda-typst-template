@@ -66,6 +66,49 @@ The template will automatically:
 - Apply consistent styling to abbreviation references (blue colored links)
 - Support the `abbr-page-break` parameter to control whether the abbreviations list starts on a new page
 
+## Bibliography and Citation Style
+
+The template includes a customized IEEE citation style (`ieee.csl`) that displays **full author names** instead of abbreviated initials. This differs from the standard IEEE style which abbreviates first names (e.g., "J. Smith" becomes "John Smith").
+
+### Using the custom IEEE style
+
+The custom IEEE style is used by entering the file path
+
+```typst
+#show: clean-hda.with(
+  title: "Your Title",
+  // ... other configuration ...
+  // default:
+  // bib-style: "ieee", 
+  // customized with full names 
+  bib-style: "ieee.csl",
+  bibliography: bibliography("sources.bib"),
+)
+```
+
+The custom `ieee.csl` file is included in the template and automatically provides:
+- Full author names in references (not abbreviated)
+- Compliance with IEEE formatting guidelines otherwise
+
+## Math Equation Numbering
+
+The template provides optional automatic numbering for math equations. By default, math equations are not numbered.
+
+### Enabling math equation numbering
+
+To enable automatic numbering of equations, set the `enable-math-numbering` parameter to `true`:
+
+```typst
+#show: clean-hda.with(
+  title: "Your Title",
+  // ... other configuration ...
+  enable-math-numbering: true,  // Enable automatic equation numbering
+  math-numbering: "(1)",         // Optional: customize numbering format (default: "(1)")
+)
+```
+
+When enabled, all display math equations will be automatically numbered. You can customize the numbering format using the `math-numbering` parameter (e.g., `"(1)"`, `"[1]"`, etc.).
+
 ## Getting started for template development
 
 You may want to follow these steps if you want to contribute to the template itself and make your development easier for fast iteration cycles.

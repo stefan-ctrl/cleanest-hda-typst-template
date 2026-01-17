@@ -46,6 +46,7 @@
   glossary: none,
   bib-style: "ieee",
   math-numbering: "(1)",
+  enable-math-numbering: false,
   logo-left: image("hda.svg"),
   logo-right: none,
   ignored-link-label-keys-for-highlighting: (),
@@ -109,7 +110,9 @@
   set figure.caption(separator: [ --- ], position: bottom)
 
   // math numbering
-  set math.equation(numbering: math-numbering)
+  if (enable-math-numbering) {
+    set math.equation(numbering: math-numbering)
+  }
 
   // initialize `glossarium`
   // CAVEAT: all `figure` show rules must come before this (see `glossarium` docs)
