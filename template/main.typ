@@ -113,7 +113,7 @@ Quellcode mit entsprechender Formatierung wird wie folgt eingefügt:
 
 #figure(
   caption: "Ein Stück Quellcode",
-  sourcecode[```ts
+  sourcecode[```tsx
     const ReactComponent = () => {
       return (
         <div>
