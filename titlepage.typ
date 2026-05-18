@@ -20,13 +20,14 @@
   confidentiality-marker,
   university-short,
   page-grid,
+  page-margin,
 ) = {
 
   // ---------- Page Setup ---------------------------------------
 
   set page(     
     // identical to document
-    margin: (top: 4cm, bottom: 3cm, left: 4cm, right: 3cm),   
+    margin: page-margin,
   )
   // The whole page in `title-font`, all elements centered
   set text(font: title-font, size: page-grid)
