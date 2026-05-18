@@ -90,14 +90,25 @@
 
   // ---------- Fonts & Related Measures ---------------------------------------
 
-  let body-font = "Palatino"
+  let body-font = ("TeX Gyre Pagella", "Palatino")
   let body-size = 11pt
-  let heading-font = "Palatino"
+  let heading-font = ("TeX Gyre Pagella", "Palatino")
+  let chapter-number-font = ("TeX Gyre Pagella", "Palatino")
+  let chapter-number-size = 56pt
   let h1-size = 20pt
   let h2-size = 11pt
   let h3-size = 11pt
   let h4-size = 11pt
   let page-grid = 13.6pt  // vertical spacing on all pages
+  let classic-text-width = 370pt
+  let classic-layout-height = 750pt
+  let base-side-margin = (210mm - classic-text-width) / 2
+  let page-margin = (
+    top: (297mm - classic-layout-height) / 2,
+    bottom: (297mm - classic-layout-height) / 2,
+    left: base-side-margin + 2.5mm, // BCOR = 5mm => shift by half to the inner side
+    right: base-side-margin - 2.5mm,
+  )
 
   
   // ---------- Basic Document Settings ---------------------------------------
@@ -107,7 +118,7 @@
   let in-body = state("in-body", true)                  // to control heading formatting in/outside of body
 
   // customize look of figure
-  set figure.caption(separator: [ --- ], position: bottom)
+  set figure.caption(separator: [: ], position: bottom)
 
   // math numbering
   if (enable-math-numbering) {
@@ -151,13 +162,14 @@
       confidentiality-marker,
       university-short,
       page-grid,
+      page-margin,
     )
   }
   counter(page).update(1)  
 
   // ---------- Heading Format (Part I) ---------------------------------------
-  show heading: set text(weight: "bold", font: heading-font)
-  show heading.where(level: 1): it => {v(2 * page-grid) + text(size: 2 * page-grid, it)}
+  show heading: set text(weight: "regular", font: heading-font)
+  show heading.where(level: 1): it => {v(2 * page-grid) + smallcaps(text(size: 2 * page-grid, it))}
 
   // ---------- Page Setup ---------------------------------------
 
@@ -165,25 +177,21 @@
   set text(
     font: body-font, 
     lang: language, 
-    size: body-size - 0.5pt,      // 0.5pt adjustment because of large x-hight
+    size: body-size,
     top-edge: 0.75 * body-size, 
     bottom-edge: -0.25 * body-size,
     fill: luma(0),
   )
   set par(
-    spacing: page-grid,
+    spacing: 0pt,
     leading: page-grid - body-size, 
+    first-line-indent: 1.5em,
     justify: true,
   )
 
   set page(
     paper: "a4",
-    margin: (
-      top: 2.5cm,
-      bottom: 3.0cm,
-      left: 3.0cm + 5mm, // left margin + BCOR (binding correction)
-      right: 2.5cm,
-    ),
+    margin: page-margin,
     header:
       grid(
         columns: (1fr, 1fr),
@@ -203,7 +211,6 @@
             }
           }
         ),
-        grid.cell(colspan: 2, line(length: 100%, stroke: 0.5pt)),
       ),
       header-ascent: page-grid,
   )
@@ -227,6 +234,7 @@
       university-location,
       language,
       many-authors,
+      page-margin,
     )
   }
 
@@ -242,20 +250,9 @@
   // ---------- ToC (Outline) ---------------------------------------
   set page(numbering: "i", footer: none) // numbering for List fo Abbreviations and other entries before body
 
-  // top-level TOC entries in bold without filling
-  show outline.entry.where(level: 1): it => {
-    set block(above: page-grid)
-    set text(font: heading-font, weight: "semibold", size: body-size)
-    link(
-      it.element.location(),    // make entry linkable
-      it.indented(it.prefix(), it.body() + box(width: 1fr,) +  it.page())
-    )
-  }
-
-  // other TOC entries in regular with adapted filling
-  show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): it => {
+  let dotted-outline-entry = (font-weight: "regular") => it => {
     set block(above: page-grid - body-size)
-    set text(font: heading-font, size: body-size)
+    set text(font: heading-font, size: body-size, weight: font-weight)
     link(
       it.element.location(),  // make entry linkable
       it.indented(
@@ -266,6 +263,9 @@
       )
     )
   }
+
+  show outline.entry.where(level: 1): dotted-outline-entry(font-weight: "semibold")
+  show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): dotted-outline-entry()
   if (show-table-of-contents) {
     outline(
       title: TABLE_OF_CONTENTS.at(language),
@@ -290,19 +290,7 @@
 
 
   // Figures
-  show outline.entry.where(level: 1): it => {
-    set block(above: page-grid - body-size)
-    set text(font: heading-font, size: body-size)
-    link(
-      it.element.location(),  // make entry linkable
-      it.indented(
-          it.prefix(),
-          it.body() + "  " +
-            box(width: 1fr, repeat([.], gap: 2pt), baseline: 30%) +
-            "  " + it.page()
-      )
-    )
-  }
+  show outline.entry.where(level: 1): dotted-outline-entry()
   
   if(show-table-of-figures){
     if table-of-figures-page-break {
@@ -341,42 +329,50 @@
   set heading(numbering: "1.1.1")
 
   show heading: it => {
-    set par(leading: 4pt, justify: false)
-    text(it, top-edge: 0.75em, bottom-edge: -0.25em)
+    set par(leading: 4pt, justify: false, first-line-indent: 0em)
+    text(font: heading-font, it, top-edge: 0.75em, bottom-edge: -0.25em)
     v(page-grid, weak: true)
   }
 
   show heading.where(level: 1): it => {
-    set par(leading: 0pt, justify: false)
+    set par(leading: 0pt, justify: false, first-line-indent: 0em)
     pagebreak()
     context{ 
       if in-body.get() {
-        v(page-grid * 1.5)
+        v(page-grid)
         place(
-          top + right,
-          //dx: 25pt, // move further right, adjust as needed
-          dy: page-grid * 0.55,         // no vertical shift
+          top + left,
+          dx: -2.2em,
+          dy: 0.2em,
           text(counter(heading).display(), 
             top-edge: "bounds",
-            size: h1-size, weight: 0, luma(43.53%),
-            font: "New Computer Modern Math" 
+            size: chapter-number-size,
+            fill: luma(55%),
+            font: chapter-number-font,
           )
         )
-        text(               // heading text on separate line
-          it.body, size: h1-size,
-          top-edge: 0em, 
-          bottom-edge: 0em,
+        smallcaps(
+          text(
+            it.body, 
+            size: h1-size,
+            top-edge: 0em, 
+            bottom-edge: 0em,
+          )
         )
+        v(0.75 * page-grid)
+        line(length: 100%, stroke: 0.5pt)
       } else {
         v(2 * page-grid) 
         text(size: 2 * page-grid, counter(heading).display() + h(0.5em) + it.body)   // appendix
+        v(0.75 * page-grid)
+        line(length: 100%, stroke: 0.5pt)
       }
     }
   }
 
-  show heading.where(level: 2): it => {v(16pt) + text(size: h2-size, it)}
-  show heading.where(level: 3): it => {v(16pt) + text(size: h3-size, it)}
-  show heading.where(level: 4): it => {v(16pt) + smallcaps(text(size: h4-size, weight: "semibold", it.body))}
+  show heading.where(level: 2): it => {v(1.25 * page-grid) + smallcaps(text(size: h2-size, it))}
+  show heading.where(level: 3): it => {v(1.25 * page-grid) + text(size: h3-size, style: "italic", it)}
+  show heading.where(level: 4): it => {v(1.0 * page-grid) + text(size: h4-size, style: "italic", it.body)}
 
  // ---------- Body Text ---------------------------------------
 

@@ -20,16 +20,17 @@
   confidentiality-marker,
   university-short,
   page-grid,
+  page-margin,
 ) = {
 
   // ---------- Page Setup ---------------------------------------
 
   set page(     
     // identical to document
-    margin: (top: 4cm, bottom: 3cm, left: 4cm, right: 3cm),   
+    margin: page-margin,   
   )
   // The whole page in `title-font`, all elements centered
-  set text(font: title-font, size: page-grid)
+  set text(font: title-font, size: page-grid, fill: luma(0))
   set align(center)
 
   // ---------- Logo(s) ---------------------------------------
@@ -38,7 +39,7 @@
     place(                                
       top + center,
       dy: -3 * page-grid,
-      box(logo-left, height: 8 * page-grid) 
+      box(logo-left, width: 100%) 
     )
   } else if logo-left != none and logo-right != none {    // two logos: left & right
     place(
@@ -56,10 +57,10 @@
   // ---------- Title ---------------------------------------
 
   v(7 * page-grid)     
-  text(weight: "bold", fill: luma(80), size: 1.5 * page-grid, title)
+  text(weight: "bold", size: 1.5 * page-grid, title)
   v(0.25 * page-grid)
   if subtitle != none {
-    text(fill: luma(80), size: page-grid, subtitle)
+    text(size: page-grid, subtitle)
   }
   v(page-grid)
 
@@ -163,7 +164,7 @@
       align: (right, left),
 
       // submission date
-      text(weight: "bold", fill: luma(80), TITLEPAGE_DATE.at(language)),
+      text(weight: "bold", TITLEPAGE_DATE.at(language)),
       text(
         if (type(date) == datetime) {
           date.display(date-format)
@@ -173,7 +174,7 @@
       ),
 
       // students
-      align(text(weight: "bold", fill: luma(80), TITLEPAGE_STUDENT_ID_AND_COURSE.at(language)), top),
+      align(text(weight: "bold", TITLEPAGE_STUDENT_ID_AND_COURSE.at(language)), top),
       stack(
         dir: ttb,
         for author in authors {
@@ -184,7 +185,7 @@
 
       // company
       ..if (not at-university) { 
-        (align(text(weight: "bold", fill: luma(80), TITLEPAGE_COMPANY.at(language)), top),
+        (align(text(weight: "bold", TITLEPAGE_COMPANY.at(language)), top),
          stack(
           dir: ttb,
           for author in authors {
@@ -240,7 +241,7 @@
       ..if ("ref" in supervisor) {
         (
           text(
-            weight: "bold", fill: luma(80), 
+            weight: "bold",
             TITLEPAGE_SUPERVISOR_REF.at(language) + [:]
           ),
           if (type(supervisor.ref) == str) {text(supervisor.ref)}
@@ -249,7 +250,7 @@
       ..if ("co-ref" in supervisor) {
         (
           text(
-            weight: "bold", fill: luma(80),
+            weight: "bold",
             TITLEPAGE_SUPERVISOR_COREF.at(language) + [:]
           ),
           if (type(supervisor.co-ref) == str) {text(supervisor.co-ref)}

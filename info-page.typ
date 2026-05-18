@@ -12,12 +12,13 @@
   university-location,
   language,
   many-authors,
+  page-margin,
 ) = {
 
   // ---------- Page Setup ---------------------------------------
 
   set page(
-    margin: (top: 4cm, bottom: 3cm, left: 4cm, right: 3cm),
+    margin: page-margin,
   )
 
   if (show-confidentiality-statement-at-beginning) {
