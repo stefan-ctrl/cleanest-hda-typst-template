@@ -185,9 +185,9 @@
     fill: luma(0),
   )
   set par(
-    spacing: page-grid,
+    spacing: page-grid - body-size,
     leading: page-grid - body-size, 
-    // first-line-indent: 1.5em, // TODO
+    first-line-indent: 1em, // TODO
     justify: true,
   )
 
