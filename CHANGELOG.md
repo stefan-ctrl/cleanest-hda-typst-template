@@ -1,6 +1,8 @@
 # Changelog
 
-
+## 0.4.0
+- align spacing and intent with https://github.com/mbredel/thesis-template
+- add declaration of authorship option for beginning of thesis by setting `show-confidentiality-statement-at-beginning`
 
 ## 0.3.0
 
