@@ -245,9 +245,6 @@
   }
 
 
-  // ------- Citation Style -------
-  set cite(style: "alphanumeric.csl")
-
   // ---------- Abstract ---------------------------------------
 
   if (show-abstract and abstract != none) {
