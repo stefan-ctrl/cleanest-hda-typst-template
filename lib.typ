@@ -381,6 +381,7 @@
           top-edge: 0em, 
           bottom-edge: 0em,
         )
+        v(0.75 * page-grid) 
       } else {
         v(2 * page-grid) 
         text(size: 2 * page-grid, counter(heading).display() + h(0.5em) + it.body)   // appendix
