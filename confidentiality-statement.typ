@@ -16,7 +16,7 @@
   heading(level: 1, numbering: none, outlined: false, CONFIDENTIALITY_STATEMENT_TITLE.at(language))
 
   if (confidentiality-statement-content != none) {
-    par(confidentiality-statement-content, justify: true)
+    par(confidentiality-statement-content, justify: true, first-line-indent: 0em)
   } else {
     let authors-by-company = authors.map(author => author.name).dedup()
     let authors-by-study = authors.map(author => author.course-of-studies).dedup()
@@ -27,7 +27,6 @@
     } else {
       INSTITUTION_PLURAL.at(language)
     }
-
     text(CONFIDENTIALITY_STATEMENT_SECTION_A.at(language))
     v(1em)
     align(
@@ -39,9 +38,12 @@
 
     par(
       justify: true,
+      first-line-indent: 0em,
       CONFIDENTIALITY_STATEMENT_SECTION_B.at(language) + [ ] + companies + CONFIDENTIALITY_STATEMENT_SECTION_C.at(language) + [ ] + authors-by-study.join(" | ") + CONFIDENTIALITY_STATEMENT_SECTION_D.at(language) + university + [ ] + university-location + CONFIDENTIALITY_STATEMENT_SECTION_E.at(language) + institution + [ (#companies)] + CONFIDENTIALITY_STATEMENT_SECTION_F.at(language),
     )
   }
+
+  set par(first-line-indent: 0em)
 
   let end-date = if (type(date) == datetime) {
     date

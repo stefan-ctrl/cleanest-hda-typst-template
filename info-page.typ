@@ -1,4 +1,5 @@
 #import "confidentiality-statement.typ": *
+#import "declaration-of-authorship.typ": *
 
 #let info-page(
   authors,
@@ -7,20 +8,44 @@
   date-format,
   pdf-version,
   show-confidentiality-statement-at-beginning,
+  show-declaration-of-authorship-at-beginning,
   confidentiality-statement-content,
+  declaration-of-authorship-content,
   university,
   university-location,
+  at-university,
   language,
   many-authors,
+  page-margin,
 ) = {
 
   // ---------- Page Setup ---------------------------------------
 
   set page(
-    margin: (top: 4cm, bottom: 3cm, left: 4cm, right: 3cm),
+    margin: page-margin,
   )
 
+  if (show-declaration-of-authorship-at-beginning) {
+
+    declaration-of-authorship(
+      authors,
+      title,
+      declaration-of-authorship-content,
+      date,
+      language,
+      many-authors,
+      at-university,
+      university-location,
+      date-format,
+    )
+  }
+
   if (show-confidentiality-statement-at-beginning) {
+    
+    if (show-declaration-of-authorship-at-beginning) {
+      pagebreak()
+    }
+
     confidentiality-statement(
       authors,
       title,
@@ -33,6 +58,9 @@
       date-format,
   )
   }
+
+
+
 
   // ---------- Info at Bottom of Page ---------------------------------------
 

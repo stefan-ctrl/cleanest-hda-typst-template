@@ -23,8 +23,9 @@
   confidentiality-marker: (display: false),
   type-of-thesis: none,
   show-confidentiality-statement-at-beginning: true,
-  show-confidentiality-statement-at-end: true,
-  show-declaration-of-authorship: true,
+  show-confidentiality-statement-at-end: false,
+  show-declaration-of-authorship-at-beginning: true,
+  show-declaration-of-authorship-at-end: false,
   show-table-of-contents: true,
   show-table-of-figures: true,
   show-table-of-tables: true,
@@ -59,6 +60,7 @@
 ) = {
   // check required attributes
   let show-confidentiality-statement = show-confidentiality-statement-at-beginning
+  let show-declaration-of-authorship = show-declaration-of-authorship-at-beginning
   let many-authors = authors.len() > 3
   check-attributes(
     title,
@@ -98,6 +100,17 @@
   let h3-size = 11pt
   let h4-size = 11pt
   let page-grid = 13.6pt  // vertical spacing on all pages
+
+  // Latex Values based from @AI analysis
+  let classic-text-width = 370pt
+  let classic-layout-height = 750pt
+  let base-side-margin = (210mm - classic-text-width) / 2
+  let page-margin = (
+    top: 2.5cm,
+    bottom: 3.5cm,
+    left: base-side-margin + 2.5mm, // BCOR = 5mm => shift by half to the inner side
+    right: base-side-margin - 2.5mm,
+  )
 
   
   // ---------- Basic Document Settings ---------------------------------------
@@ -151,6 +164,7 @@
       confidentiality-marker,
       university-short,
       page-grid,
+      page-margin,
     )
   }
   counter(page).update(1)  
@@ -165,25 +179,21 @@
   set text(
     font: body-font, 
     lang: language, 
-    size: body-size - 0.5pt,      // 0.5pt adjustment because of large x-hight
+    size: body-size,
     top-edge: 0.75 * body-size, 
     bottom-edge: -0.25 * body-size,
     fill: luma(0),
   )
   set par(
-    spacing: page-grid,
+    spacing: page-grid - body-size,
     leading: page-grid - body-size, 
+    first-line-indent: 1em, // TODO
     justify: true,
   )
 
   set page(
     paper: "a4",
-    margin: (
-      top: 2.5cm,
-      bottom: 3.0cm,
-      left: 3.0cm + 5mm, // left margin + BCOR (binding correction)
-      right: 2.5cm,
-    ),
+    margin: page-margin,
     header:
       grid(
         columns: (1fr, 1fr),
@@ -222,11 +232,15 @@
       date-format,
       pdf-version,
       show-confidentiality-statement-at-beginning,
+      show-declaration-of-authorship-at-beginning,
       confidentiality-statement-content,
+      declaration-of-authorship-content,
       university,
       university-location,
+      at-university,
       language,
       many-authors,
+      page-margin,
     )
   }
 
@@ -244,7 +258,7 @@
 
   // top-level TOC entries in bold without filling
   show outline.entry.where(level: 1): it => {
-    set block(above: page-grid)
+    set block(above: page-grid - body-size)
     set text(font: heading-font, weight: "semibold", size: body-size)
     link(
       it.element.location(),    // make entry linkable
@@ -367,6 +381,7 @@
           top-edge: 0em, 
           bottom-edge: 0em,
         )
+        v(0.75 * page-grid) 
       } else {
         v(2 * page-grid) 
         text(size: 2 * page-grid, counter(heading).display() + h(0.5em) + it.body)   // appendix
@@ -415,11 +430,11 @@
 
   // ========== LEGAL BACKMATTER ========================================
 
-  set heading(numbering: it => h(-18pt) + "", outlined: false)
 
   // ---------- Confidentiality Statement ---------------------------------------
 
   if (show-confidentiality-statement-at-end) {
+    set heading(numbering: it => h(-18pt) + "", outlined: false)
     confidentiality-statement(
       authors,
       title,
@@ -435,7 +450,8 @@
 
   // ---------- Declaration Of Authorship ---------------------------------------
 
-  if (show-declaration-of-authorship) {
+  if (show-declaration-of-authorship-at-end) {
+    set heading(numbering: it => h(-18pt) + "", outlined: false)
     declaration-of-authorship(
       authors,
       title,

@@ -11,7 +11,10 @@
   city,
   date-format,
 ) = {
-  heading(level: 1, DECLARATION_OF_AUTHORSHIP_TITLE.at(language))
+
+  set par(first-line-indent: 0em)
+
+  heading(level: 1, numbering: none, outlined: false, DECLARATION_OF_AUTHORSHIP_TITLE.at(language))
   v(1em)
 
   if (declaration-of-authorship-content != none) {
